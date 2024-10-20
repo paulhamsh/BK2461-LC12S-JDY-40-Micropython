@@ -39,6 +39,24 @@ Configuration is always at 9600 baud.
 
 Configuration is not remembered between power on cycles.    
 
+## JDY-4 configuration
+
+Command        |  Description
+---------------|----------------
+AT+BAUD\r\n    |            
+AT+RFID\r\n    |  
+AT+DVID\r\n    |  
+AT+RFC\r\n     |  
+AT+CLSS\r\n    |
+
+Command            |  Description
+-------------------|----------------
+AT+DVID2244\r\n    |  
+AT+RFID1133\r\n    |  
+AT+RFC001\r\n      |  
+AT+BAUD6\r\n       |  
+  
+
 
 ## One Pico Pi running two LC12S.   
 One UART on GP0, GP1, the second on GP4, GP5.   
