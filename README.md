@@ -7,10 +7,10 @@ One UART on GP0, GP1, the second on GP4, GP5.
 
 UART        |   1   |    2
 ------------|-------|-------- 
-RX
-TX
-CS
-SET
+RX          |  0    |    4
+TX          |  1    |    5
+CS          |  2    |    6
+SET         |  3    |    7
 
 ```
 import board
