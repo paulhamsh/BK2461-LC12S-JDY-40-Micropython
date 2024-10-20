@@ -2,7 +2,41 @@
 Micropython to control the LC12S and JDY-40 wireless communication boards based on the BK2461
 
 
-One Pico Pi running two LC12S.   
+```
+LC12S datasheet     https://arduinolab.pw/wp-content/uploads/2019/05/H2-LCS12.pdf
+                    http://user.cavenet.com/jgurley/lc12s/LC12S_datasheet.pdf
+
+JDY-40 datasheet    https://w.electrodragon.com/w/images/0/05/EY-40_English_manual.pdf
+
+BK2461 datasheet    https://www.mikrocontroller.net/attachment/381910/BT-WiFi-52rf5541.pdf
+```
+
+
+
+## LC12S configuration
+
+Byte       |  Value       | Description
+-----------|--------------|---------------
+1          |  0x44, 0x5a  |    Header
+3          |  0x22, 0x11  |    Device Id (cannot be altered on LC12S)
+5          |  0x33, 0x44  |    Network address
+1          |  0x00        |    
+1          |  0x06        |    Power
+1          |  0x00        |    
+1          |  0x05        |    Baud rate
+1          |  0x00        |    
+1          |  0x60        |    Channel
+1          |  0x00        |    
+1          |  0x00        |    
+1          |  0x00        |    
+1          |  0x12        |    Number of bytes in messages (18)
+1          |  0x00        |    
+1          |  0x00        |    CRC
+
+0xAA, 0x5A, 0x22, 0x44, 0x11, 0x33, 0x00, 0x06, 0x00, 0x05, 0x00, 0x60, 0x00, 0x00, 0x00, 0x12, 0x00, 0x2e
+
+
+## One Pico Pi running two LC12S.   
 One UART on GP0, GP1, the second on GP4, GP5.   
 
 UART        |   1   |    2
