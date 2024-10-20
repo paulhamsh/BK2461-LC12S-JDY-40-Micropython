@@ -2,6 +2,16 @@
 Micropython to control the LC12S and JDY-40 wireless communication boards based on the BK2461
 
 
+One Pico Pi running two LC12S.   
+One UART on GP0, GP1, the second on GP4, GP5.   
+
+UART            1        2
+------------|-------|-------- 
+RX
+TX
+CS
+SET
+
 ```
 import board
 import digitalio
