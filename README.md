@@ -35,6 +35,10 @@ Byte       |  Value       | Description
 
 0xAA, 0x5A, 0x22, 0x44, 0x11, 0x33, 0x00, 0x06, 0x00, 0x05, 0x00, 0x60, 0x00, 0x00, 0x00, 0x12, 0x00, 0x2e
 
+Configuration is always at 9600 baud.    
+
+Configuration is not remembered between power on cycles.    
+
 
 ## One Pico Pi running two LC12S.   
 One UART on GP0, GP1, the second on GP4, GP5.   
