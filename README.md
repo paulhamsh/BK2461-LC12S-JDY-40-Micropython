@@ -9,9 +9,12 @@ LC12S datasheet     https://arduinolab.pw/wp-content/uploads/2019/05/H2-LCS12.pd
 JDY-40 datasheet    https://w.electrodragon.com/w/images/0/05/EY-40_English_manual.pdf
 
 BK2461 datasheet    https://www.mikrocontroller.net/attachment/381910/BT-WiFi-52rf5541.pdf
+
+Pan 7420 datasheet  https://bbs.panchip.com/forum.php?mod=attachment&aid=MTkwNnxkYzA2YTQxZnwxNzI5Nzg0NTc3fDB8Nzk3Mw%3D%3D
 ```
 
-
+The LC12S seems to have a historic blue version but can only seem to be purchased as the red v2 version (in 2024).   
+JDY-40 has two versions, which are not compatible over wireless. The UART interface and AT commands seem similar. One uses the BK2461 chip and the other a Panchip 7420.
 
 ## LC12S configuration
 
