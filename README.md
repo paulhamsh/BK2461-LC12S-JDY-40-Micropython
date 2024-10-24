@@ -173,10 +173,9 @@ import busio
 from digitalio import DigitalInOut, Direction, Pull
 import time
 
-U0 = "LC12S" #"LC12S"
-U1 = "JDY" #"LC12S"
-
-DEV = 1 #2
+uart1_type = "JDY" #"LC12S"
+uart0_type = "LC12S" #"LC12S"
+DEV = 2 #2
 
 if DEV == 1:
     msg0 = [0x10, 0x11, 0x12, 0x13]
@@ -210,15 +209,15 @@ def uart_str_trf(uart, cmd):
         print(val)
     print()
 
-csw0=DigitalInOut(board.GP2)
-csw0.direction = Direction.OUTPUT
-setw0 = DigitalInOut(board.GP3)
+setw0 = DigitalInOut(board.GP2)
 setw0.direction = Direction.OUTPUT
+csw0=DigitalInOut(board.GP3)
+csw0.direction = Direction.OUTPUT
 
-csw1=DigitalInOut(board.GP6)
-csw1.direction = Direction.OUTPUT
-setw1 = DigitalInOut(board.GP7)
+setw1 = DigitalInOut(board.GP6)
 setw1.direction = Direction.OUTPUT
+csw1=DigitalInOut(board.GP7)
+csw1.direction = Direction.OUTPUT
 
 setw0.value = True
 csw0.value = True
@@ -241,46 +240,28 @@ for i in range(17):
     temp += lc12s_config[i]
 lc12s_config[17] = temp % 256
 
-# Config uart0
-print("Configure uart0 as", "LC12S" if U0 == "LC12S" else "JDY")
-print("-------------------")
-if U0 == "LC12S":
-    uart0 = busio.UART(tx=board.GP0, rx=board.GP1, baudrate=9600, timeout = 0.1)
-    uart_bin_trf(uart0, lc12s_config)
-    uart0.deinit()
-    uart0 = busio.UART(tx=board.GP0, rx=board.GP1, baudrate=19200, timeout = 0.1)
-else:
-    #uart0 = busio.UART(tx=board.GP0, rx=board.GP1, baudrate=14400, timeout = 0.1)
-    #uart0 = busio.UART(tx=board.GP0, rx=board.GP1, baudrate=9600, timeout = 0.1)
-    uart0 = busio.UART(tx=board.GP0, rx=board.GP1, baudrate=19200, timeout = 0.1)
-
-    uart_str_trf(uart0, b"AT+DVID2244\r\n")
-    uart_str_trf(uart0, b"AT+RFID1133\r\n")
-    uart_str_trf(uart0, b"AT+RFC001\r\n") 
-    uart_str_trf(uart0, b"AT+BAUD6\r\n")
-    #uart0.deinit()
-    #uart0 = busio.UART(tx=board.GP0, rx=board.GP1, baudrate=19200, timeout = 0.1)
-
-# Config uart1
-print("Configure uart1 as", "LC12S" if U1 == "LC12S" else "JDY")
-print("-------------------")
-
-if U1 == "LC12S":
-    uart1 = busio.UART(tx=board.GP4, rx=board.GP5, baudrate=9600, timeout = 0.1)
-    uart_bin_trf(uart1, lc12s_config)
-    uart1.deinit()
-    uart1 = busio.UART(tx=board.GP4, rx=board.GP5, baudrate=19200, timeout = 0.1)
-else:
-    #uart1 = busio.UART(tx=board.GP4, rx=board.GP5, baudrate=14400, timeout = 0.1)
-    #uart1 = busio.UART(tx=board.GP4, rx=board.GP5, baudrate=9600, timeout = 0.1)
-    uart1 = busio.UART(tx=board.GP4, rx=board.GP5, baudrate=19200, timeout = 0.1)
-
-    uart_str_trf(uart1, b"AT+DVID2244\r\n")
-    uart_str_trf(uart1, b"AT+RFID1133\r\n")
-    uart_str_trf(uart1, b"AT+RFC001\r\n")  
-    uart_str_trf(uart1, b"AT+BAUD6\r\n")
-    #uart1.deinit()
-    #uart1 = busio.UART(tx=board.GP4, rx=board.GP5, baudrate=19200, timeout = 0.1)
+def configure(uart_name, uart_type, tx_pin, rx_pin, baud):
+    print("Configure %s as %s" %(uart_name, "LC12S" if uart_type == "LC12S" else "JDY"))
+    print("-------------------")
+    if uart_type== "LC12S":
+        uart = busio.UART(tx=tx_pin, rx=rx_pin, baudrate=9600, timeout = 0.1)
+        uart_bin_trf(uart, lc12s_config)
+        uart.deinit()
+        uart = busio.UART(tx=tx_pin, rx=rx_pin, baudrate=19200, timeout = 0.1)
+    else:
+        uart = busio.UART(tx=tx_pin, rx=rx_pin, baudrate=baud, timeout = 0.1)
+        uart_str_trf(uart, b"AT+DVID2244\r\n")
+        uart_str_trf(uart, b"AT+RFID1133\r\n")
+        uart_str_trf(uart, b"AT+RFC001\r\n") 
+        uart_str_trf(uart, b"AT+BAUD6\r\n")
+        
+        if baud != 19200:
+            uart.deinit()            
+            uart = busio.UART(tx=tx_pin, rx=rx_pin, baudrate=19200, timeout = 0.1)
+    return uart
+    
+uart0 = configure("uart0", uart0_type, board.GP0, board.GP1, 19200)    
+uart1 = configure("uart1", uart1_type, board.GP4, board.GP5, 19200)    
 
 time.sleep(1.0)
 
@@ -299,7 +280,7 @@ while True:
     leng = uart0.in_waiting
     if leng > 0:
         val = uart0.read(leng)
-        print("Uart 0 %5s rx:" % U0, end="")
+        print("Uart 0 %5s rx:" % uart0_type, end="")
         print_hex(val)
     
     time.sleep(0.3)
@@ -309,8 +290,9 @@ while True:
     leng1 = uart1.in_waiting
     if leng1 > 0:
         val1 = uart1.read(leng1)
-        print("Uart 1 %5s rx:"% U1, end="")
+        print("Uart 1 %5s rx:"% uart1_type, end="")
         print_hex(val1)
     
     print()
+        
 ```
