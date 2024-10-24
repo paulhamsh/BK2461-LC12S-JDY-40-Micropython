@@ -21,8 +21,8 @@ JDY-40 has two versions, which are not compatible over wireless. The UART interf
 Byte       |  Value       | Description
 -----------|--------------|---------------
 1          |  0x44, 0x5a  |    Header
-3          |  0x22, 0x11  |    Device Id (cannot be altered on LC12S)
-5          |  0x33, 0x44  |    Network address
+3          |  0x22, 0x44  |    Device Id (cannot be altered on LC12S)
+5          |  0x11, 0x33  |    Network address
 1          |  0x00        |    
 1          |  0x06        |    Power
 1          |  0x00        |    
